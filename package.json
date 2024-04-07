@@ -1,20 +1,45 @@
 {
-  "name": "ui",
+  "name": "rn-ui",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo clean"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@rollup/plugin-typescript": "11.1.6",
+    "@tsconfig/react-native": "^3.0.5",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.74",
+    "@types/react-test-renderer": "^18.0.7",
+    "concurrently": "8.2.2",
+    "glob": "^10.3.12",
     "prettier": "^3.2.5",
-    "turbo": "latest"
+    "rimraf": "^5.0.5",
+    "rollup": "4.14.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.2",
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.4"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=18"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

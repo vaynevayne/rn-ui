@@ -1,0 +1,23 @@
+{
+  "name": "@repo/rollup-config",
+  "version": "0.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-image": "^3.0.3",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "@rollup/plugin-typescript": "11.1.6",
+    "esbuild": "^0.20.2",
+    "rollup-plugin-esbuild": "^6.1.1"
+  }
+}
