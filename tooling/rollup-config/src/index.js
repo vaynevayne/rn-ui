@@ -20,6 +20,16 @@ const defaultPlugins = [
   commonjs({
     include: /node_modules/,
   }),
+  {
+    name: "@rollup-plugin/remove-empty-chunks",
+    generateBundle(_, bundle) {
+      for (const [name, chunk] of Object.entries(bundle)) {
+        if (chunk.type === "chunk" && chunk.code.length === 0) {
+          delete bundle[name];
+        }
+      }
+    },
+  },
 ];
 
 const onwarn = (warning, rollupWarn) => {
@@ -31,38 +41,16 @@ const deps = [
   ...Object.keys(packageJson.peerDependencies ?? {}),
 ];
 
-console.log("deps", cwd(), import.meta.url);
 const external = new RegExp(`^(${deps.join("|")})`);
 
 const emsConfig = defineConfig({
-  input: Object.fromEntries(
-    globSync("src/**/*.{ts,tsx}").map((file) => {
-      console.log(
-        "+++",
-        path.relative(
-          "src",
-          file.slice(0, file.length - path.extname(file).length)
-        ),
-        path.resolve(cwd(), file)
-      );
-      return [
-        // 这里将删除 `src/` 以及每个文件的扩展名。
-        // 因此，例如 src/nested/foo.js 会变成 nested/foo
-        path.relative(
-          "src",
-          file.slice(0, file.length - path.extname(file).length)
-        ),
-        // 这里可以将相对路径扩展为绝对路径，例如
-        // src/nested/foo 会变成 /project/src/nested/foo.js
-        path.resolve(cwd(), file),
-      ];
-    })
-  ), // 跟单入口 src/index.ts 生成的文件一样, why? esbuild的原因吗?
+  input: globSync("src/**/*.{ts,tsx}"), // 跟单入口 src/index.ts 生成的文件一样, why? esbuild的原因吗?
   output: {
     format: "es",
     exports: "named",
     entryFileNames: "[name].mjs",
     dir: path.resolve(cwd(), "dist/esm"),
+    preserveModules: true,
   },
   onwarn,
   external,
@@ -77,26 +65,13 @@ const emsConfig = defineConfig({
 });
 
 const cjsConfig = defineConfig({
-  input: Object.fromEntries(
-    globSync("src/**/*.{ts,tsx}").map((file) => {
-      return [
-        // 这里将删除 `src/` 以及每个文件的扩展名。
-        // 因此，例如 src/nested/foo.js 会变成 nested/foo
-        path.relative(
-          "src",
-          file.slice(0, file.length - path.extname(file).length)
-        ),
-        // 这里可以将相对路径扩展为绝对路径，例如
-        // src/nested/foo 会变成 /project/src/nested/foo.js
-        path.resolve(cwd(), file),
-      ];
-    })
-  ),
+  input: globSync("src/**/*.{ts,tsx}"),
   output: {
     format: "cjs",
     exports: "named",
     entryFileNames: "[name].cjs",
     dir: path.resolve(cwd(), "dist/cjs"),
+    preserveModules: true,
   },
   onwarn,
   external,
