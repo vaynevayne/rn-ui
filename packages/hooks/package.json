@@ -1,7 +1,6 @@
 {
   "name": "@repo/hooks",
   "version": "0.0.0",
-  "private": true,
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -28,7 +27,7 @@
   "scripts": {
     "dev":"rollup --config node:@repo/rollup-config --watch",
     "build": "concurrently \"rollup --config node:@repo/rollup-config --environment NODE_ENV:production\" pnpm:tsc",
-    "clean": "rimraf dist .turbo",
+    "clean": "rimraf dist .turbo && rimraf node_modules",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "tsc":"tsc -p tsconfig.json --declaration true --emitDeclarationOnly --declarationDir dist/types",
     "typecheck": "tsc --noEmit",

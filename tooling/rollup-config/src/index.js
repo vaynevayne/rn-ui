@@ -2,6 +2,7 @@ import { defineConfig } from "rollup";
 import resolvePlugin from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { cwd } from "process";
+import alias from "@rollup/plugin-alias";
 import { globSync } from "glob";
 import path from "node:path";
 import { readFileSync } from "fs";
@@ -9,7 +10,7 @@ import esbuild from "rollup-plugin-esbuild";
 import image from "@rollup/plugin-image";
 
 const packageJson = JSON.parse(
-  readFileSync(path.resolve(cwd(), "./package.json"))
+  readFileSync(path.resolve(cwd(), "./package.json"), "utf-8")
 );
 
 const isProd = process.env.NODE_ENV === "production";
@@ -30,6 +31,11 @@ const defaultPlugins = [
       }
     },
   },
+  alias({
+    entries: [
+      { find: "@assets", replacement: path.resolve(cwd(), "src/assets") },
+    ],
+  }),
 ];
 
 const onwarn = (warning, rollupWarn) => {
@@ -87,4 +93,4 @@ const cjsConfig = defineConfig({
   ],
 });
 
-export default isProd ? [emsConfig, cjsConfig] : emsConfig;
+export default [emsConfig, cjsConfig];

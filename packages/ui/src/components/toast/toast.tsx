@@ -1,12 +1,10 @@
-import { create } from "zustand";
-import { StoreApi } from "zustand";
 import RootSiblings from "react-native-root-siblings";
 import { Image, Text, View } from "react-native";
 import classNames from "classnames";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useToastStore } from "./store";
-// import errorPng from "@assets/images/error.png";
-// import successPng from "@assets/images/success.png";
+import errorPng from "@assets/images/error.png";
+import successPng from "@assets/images/success.png";
 import { CallbackResult, errorHandler, successHandler } from "./util";
 import LoadingView from "./Loading";
 
@@ -163,10 +161,10 @@ function showToast(options: ToastOptions): Promise<{ errMsg: string }> {
       >
         <View className="max-h-[200px] min-h-[120px] min-w-[120px] max-w-[200px] flex-col items-center justify-center rounded-lg bg-black/80">
           <View className="size-[76] items-center justify-center">
-            {/* <Image
+            <Image
               className="size-[55]"
               source={icon === "error" ? errorPng : successPng}
-            /> */}
+            />
             <Text className="mt-2 text-center text-white">{title || ""}</Text>
           </View>
         </View>
@@ -177,7 +175,6 @@ function showToast(options: ToastOptions): Promise<{ errMsg: string }> {
   try {
     // setTimeout fires incorrectly when using chrome debug #4470
     // https://github.com/facebook/react-native/issues/4470
-
     useToastStore.getState().rootSiblings?.destroy();
 
     useToastStore.getState().rootSiblings = new RootSiblings(ToastView);

@@ -1,9 +1,24 @@
-
 {
-"extends": "@tsconfig/recommended/tsconfig.json",
-  "include": ["*.ts", "src", "nativewind-env.d.ts"],
   "compilerOptions": {
-    "jsx": "react-native"
-  },
-  "exclude": ["node_modules"]
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "checkJs": true,
+    "importsNotUsedAsValues": "error",
+    "ignoreDeprecations": "5.0",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "exactOptionalPropertyTypes": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "skipLibCheck": true,
+    "jsx":"react-jsx",
+    "lib": ["DOM", "ESNext"]
+}
 }

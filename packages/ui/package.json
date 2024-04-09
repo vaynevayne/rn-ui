@@ -21,9 +21,9 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "dev": "rollup --config node:@repo/rollup-config --watch",
+    "dev": "concurrently \"rollup --config node:@repo/rollup-config --watch\" pnpm:tsc",
     "build": "concurrently \"rollup --config node:@repo/rollup-config --environment NODE_ENV:production\" pnpm:tsc",
-    "clean": "rimraf dist .turbo",
+    "clean": "rimraf dist .turbo && rimraf node_modules",
     "tsc": "tsc -p tsconfig.json --declaration true --emitDeclarationOnly --declarationDir dist/types",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "typecheck": "tsc --noEmit",
@@ -37,7 +37,7 @@
     "@turbo/gen": "^1.12.4",
     "@types/eslint": "^8.56.5",
     "@types/node": "^20.11.24",
-    "@types/react": "^18.2.61",
+    "@types/react": "^18.2.75",
     "@types/react-dom": "^18.2.19",
     "classnames": "^2.5.1",
     "eslint": "^8.57.0",
@@ -52,6 +52,7 @@
     "zustand": "^4.5.2"
   },
   "peerDependencies": {
+    "@types/react": "^18.2.75",
     "classnames": "^2.5.1",
     "nativewind": "4",
     "react": "^18.2.0",

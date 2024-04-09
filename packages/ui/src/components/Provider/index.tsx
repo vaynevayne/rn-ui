@@ -1,21 +1,22 @@
 import { useRef, type ReactNode } from "react";
-import { type StoreApi } from "zustand";
-import { UseBoundStoreWithEqualityFn } from "zustand/traditional";
+import type { StoreApi } from "zustand";
+import type { UseBoundStoreWithEqualityFn } from "zustand/traditional";
 import { GlobalState, createGlobalStore } from "./store";
-import { Provider } from "./context";
+import { StoreContext } from "./context";
+import { RootSiblingParent } from "react-native-root-siblings";
 
-const GlobalProvider = ({
+const Provider = ({
   children,
   components,
 }: {
   children: ReactNode;
-} & GlobalState) => {
+} & Partial<GlobalState>) => {
   const storeRef = useRef<UseBoundStoreWithEqualityFn<
     StoreApi<GlobalState>
   > | null>(null);
   if (!storeRef.current) {
     storeRef.current = createGlobalStore({
-      components,
+      components: components ?? {},
     });
   } else {
     // 处理嵌套Provider
@@ -24,7 +25,11 @@ const GlobalProvider = ({
     });
   }
 
-  return <Provider value={storeRef.current}>{children}</Provider>;
+  return (
+    <StoreContext.Provider value={storeRef.current}>
+      <RootSiblingParent>{children}</RootSiblingParent>
+    </StoreContext.Provider>
+  );
 };
 
-export { GlobalProvider };
+export { Provider };
