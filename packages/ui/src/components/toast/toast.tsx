@@ -91,7 +91,7 @@ const TstLoading = ({ title, mask }: { title: string; mask: boolean }) => {
   );
 };
 
-function showToast(options: ToastOptions): Promise<{ errMsg: string }> {
+function showToast(options: ToastOptions) {
   let {
     title,
     icon = "success",
@@ -163,7 +163,7 @@ function showToast(options: ToastOptions): Promise<{ errMsg: string }> {
           <View className="size-[76] items-center justify-center">
             <Image
               className="size-[55]"
-              source={icon === "error" ? errorPng : successPng}
+              source={{ uri: icon === "error" ? errorPng : successPng }}
             />
             <Text className="mt-2 text-center text-white">{title || ""}</Text>
           </View>
@@ -172,31 +172,31 @@ function showToast(options: ToastOptions): Promise<{ errMsg: string }> {
     );
   }
 
-  try {
-    // setTimeout fires incorrectly when using chrome debug #4470
-    // https://github.com/facebook/react-native/issues/4470
-    useToastStore.getState().rootSiblings?.destroy();
+  // try {
+  // setTimeout fires incorrectly when using chrome debug #4470
+  // https://github.com/facebook/react-native/issues/4470
+  useToastStore.getState().rootSiblings?.destroy();
 
-    useToastStore.getState().rootSiblings = new RootSiblings(ToastView);
+  useToastStore.getState().rootSiblings = new RootSiblings(ToastView);
 
+  setTimeout(() => {
+    useToastStore.getState().rootSiblings?.update(ToastView);
+  }, 100);
+
+  if (duration > 0) {
     setTimeout(() => {
-      useToastStore.getState().rootSiblings?.update(ToastView);
-    }, 100);
-
-    if (duration > 0) {
-      setTimeout(() => {
-        useToastStore.getState().rootSiblings?.destroy();
-      }, duration);
-    }
-
-    return successHandler(success, complete)(res);
-  } catch (e: any) {
-    res.errMsg = isLoading
-      ? `showLoading:fail invalid ${e}`
-      : `showToast:fail invalid ${e}`;
-    console.log("error", { ...e });
-    return errorHandler(fail, complete)(res);
+      useToastStore.getState().rootSiblings?.destroy();
+    }, duration);
   }
+
+  // return successHandler(success, complete)(res);
+  // } catch (e: any) {
+  //   res.errMsg = isLoading
+  //     ? `showLoading:fail invalid ${e}`
+  //     : `showToast:fail invalid ${e}`;
+  //   console.error(e);
+  //   return errorHandler(fail, complete)(res);
+  // }
 }
 
 function showLoading(options: LoadingOptions) {
